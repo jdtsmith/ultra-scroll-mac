@@ -4,8 +4,9 @@
 
 Importantly, it can cleanly /scroll right across/ tall images and other jumbo lines -- a perennial problem with scrolling packages to date.  As a bonus, it enables relatively smooth scrolling even with dumb third party mice.
 
+*Do you need this?*  
 #+begin_quote
-*Do you need this?*  Here's a test to try: open a big heavy-duty emacs buffer, full screen.  While scrolling smoothly such that lines move across your window's height in about 5sec, /can you easily read the content you see/, without stopping?  Is the text as clear scrolling down as it is going up?  Now, try this exercise again with your browser -- I bet it's /very/ readable there. Shouldn't emacs be like this?  If you scroll buffers with large images, this is also a good reason to give a try.
+Here's a test to try: open a big heavy-duty emacs buffer, full screen.  While scrolling smoothly such that lines move across your window's height in about 5sec, /can you easily read the content you see/, without stopping?  Is the text as clear scrolling down as it is going up?  Now, try this exercise again with your browser -- I bet it's /very/ readable there. Shouldn't emacs be like this?  If you scroll buffers with large images, this is also a good reason to give a try.
 #+end_quote
 
 * Compatibility and Usage
