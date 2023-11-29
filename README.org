@@ -67,7 +67,7 @@ Compared to the built-in precision scrolling, ~ultra-scroll-mac~ obviously works
 
 ** Why are there so many smooth scrolling modes?  Why is this so hard, it's just /scrolling/?
 
-Emacs was designed long before mice were common, not to mention modern high-resolution trackpads which send rapid micro-updates ("move up one pixel!") more than 60 times per second.  Unlike other programs, Emacs insists on keeping the cursor (point) visible at all times.  Deep in Emacs' redisplay code, it tracks where point is, and works diligently to ensure it never falls outside the visible window.  It does this not by moving point (that's the user's job), but by moving the /window/ (visible range of lines) surrounding point.
+Emacs was designed long before mice were common, not to mention modern high-resolution trackpads which send rapid micro-updates ("move up one pixel!") more than 60 times per second.  Unlike other programs, Emacs insists on keeping the cursor (point) visible at all times.  Deep in its redisplay code, Emacs tracks where point is, and works diligently to ensure it never falls outside the visible window.  It does this not by moving point (that's the user's job), but by moving the /window/ (visible range of lines) surrounding point.
 
 Once you are used to this behavior, it's actually pretty nice for navigating with =C-n= / =C-p= and friends.  But for smooth scrolling with a trackpad or mouse, it is /very problematic/ -- nothing screams "janky scrolling" like the window lurching back or forth half a page during a scroll.  Or worse: getting caught in an endless loop of scroll-in-one-direction/jump-back-in-the-other.
 
@@ -82,6 +82,8 @@ POSITION.
 Which is all well and good, but /where/ do you find such a point, in advance, safely /inside the window/?  Often this isn't terribly hard, but there is one common case where this admonition falls comically flat: scrolling past images which are /taller than the window/ -- what I call *jumbo lines*.  Where can I place point /inside the window/ when a jumbo line occupies the entire window height?
 
 As a result of these types of difficulties, pixel scrolling codes and packages are often quite involved, with much of the logic boiling down to a stalwart and increasingly heroic pile of interwoven attempts to /keep the damn point on screen/ and prevent juddering and looping as you scroll.
+
+** What should I know about scrolling Emacs if I am developing my own related package?
 
 For posterity, some things I discovered in my own mostly-victorious battle against unwanted recentering during smooth scroll, including across jumbo lines:
 
