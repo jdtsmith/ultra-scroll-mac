@@ -43,9 +43,9 @@ There is little to no configuration.  If desired for use with dumb mice, the var
 
 ** What was the motivation behind this?
 
-Picture it: a fast new laptop and 5K monitor with a large heavy-duty buffer like ~python-ts-mode~ in full screen mode.  Scrolling with a decent mouse is mostly OK, but by default pixel scrolling with the trackpad is just... /painful/. Repeated attempts to rationalize this fail, especially because it's notably worse in one direction than the other.  Scrolling Emacs feels like moving through (light) molasses.  No bueno.
+Picture it: a fast new laptop and 5K monitor with a large heavy-duty, full-screen buffer in ~python-ts-mode~.  Scrolling with a decent mouse is mostly OK, but pixel scrolling with the trackpad is just... /painful/. Repeated attempts to rationalize this fail, especially because it's notably worse in one direction than the other.  Scrolling Emacs feels like moving through (light) molasses.  No bueno.
 
-Checking into it, the smooth scroll event callback takes 20ms scrolling in one direction, and 50-60ms in the other.  Perfectly fine for normal mice which might deliver a few scrolling events a second.  /But trackpad scroll events are arriving every 15ms or less/!  The code just couldn't keep up.  Hence the molasses.
+Checking into it, the smooth scroll event callback takes 20ms scrolling in one direction, and 3x longer in the other.  Perfectly fine for normal mice which deliver a few scrolling events a second.  /But trackpad scroll events are arriving every 15ms or less/!  The code just couldn't keep up.  Hence the molasses.
 
 I also wanted to be able to peruse image rich documents without worrying about jumpy/loopy scrolling behavior.  And my extra dumb mouse didn't work well either: small scrolls did nothing, you'd have scroll pretty aggressively to get any movement at all.
 
