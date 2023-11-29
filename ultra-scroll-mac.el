@@ -95,21 +95,20 @@ DELTA should be less than the window's height."
 	 (win-height (- (nth 3 edges) (nth 1 edges)))
 	 (win-start (window-start))
 	 (current-vs (window-vscroll nil t))
-	 (new-start win-start))
+	 (start win-start))
     (if (<= delta current-vs)	    ; simple case: just reduce vscroll
 	(setq delta (- current-vs delta))
       ; Not enough vscroll: measure size above window-start
-      (let* ((dims (window-text-pixel-size
-		    nil (cons new-start (- current-vs delta))
-		    new-start nil nil nil t))
+      (let* ((dims (window-text-pixel-size nil (cons start (- current-vs delta))
+					   start nil nil nil t))
 	     (pos (nth 2 dims))
 	     (height (nth 1 dims)))
-	(when (or (not pos) (eq pos new-start))
+	(when (or (not pos) (eq pos (point-min)))
 	  (signal 'beginning-of-buffer nil))
-	(setq new-start (nth 2 dims)
+	(setq start (nth 2 dims)
 	      delta (- (+ height current-vs) delta))) ; should be >= 0
-      (unless (eq new-start win-start)
-	(set-window-start nil new-start (not (zerop delta)))))
+      (unless (eq start win-start)
+	(set-window-start nil start (not (zerop delta)))))
     (when (>= delta 0) (set-window-vscroll nil delta t t))
     
     ;; Position point to avoid recentering, moving up one line from
