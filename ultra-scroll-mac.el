@@ -73,19 +73,11 @@ DELTA should not be larger than the height of the current window."
 	(setq delta (- delta (cdr (posn-x-y (posn-at-point new-start)))))
 	(set-window-start nil new-start (not (zerop delta))))
       (set-window-vscroll nil delta t t)
-      (goto-char (posn-point (posn-at-x-y 0 off))) ; for extra safety
-      (if (zerop (vertical-motion 1)) ; move down 1 line from top
+      ;; Avoid recentering
+      (goto-char (posn-point (posn-at-x-y 0 off))) ; window-start may be above
+      (if (zerop (vertical-motion 1))	; move down 1 line from top
 	  (signal 'end-of-buffer nil))
-      (if (> initial (point)) (goto-char initial))
-
-      
-      ;; Move to a location that will not result in recentering
-      ;; (if (pos-visible-in-window-p initial) ; initial pos still fully visible?
-      ;; 	  (goto-char initial)		      ; return to it
-      ;; 	(unless (zerop delta)
-      ;; 	  (if (zerop (vertical-motion 1)) ; move down 1 line from new-start
-      ;; 	      (signal 'end-of-buffer nil))))
-      )))
+      (if (> initial (point)) (goto-char initial)))))
 
 (defun ultra-scroll-mac-up (delta)
   "Scroll the current window up by DELTA pixels.
