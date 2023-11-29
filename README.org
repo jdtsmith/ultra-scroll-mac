@@ -1,26 +1,30 @@
 #+TITLE: ultra-scroll-mac: scroll emacs-mac like lightning
 
-~ultra-scroll-mac~ is a smooth scrolling package for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port.  It provides highly optimized, pixel-precise smooth scrolling which can readily keep up with the /very/ high event rates of modern trackpads and high-precision wheel mice.  You move your fingers, the text responds, instantly.
+~ultra-scroll-mac~ is a smooth-scrolling package for [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]].  It provides highly optimized, pixel-precise smooth scrolling which can readily keep up with the /very/ high event rates of modern trackpads and high-precision wheel mice.  You move your fingers, the page responds, instantly.
 
-Importantly, it can cleanly /scroll right across/ tall images -- a perennial problem with scrolling packages to date.  As a bonus, it enables relatively smooth scrolling even with dumb third party mice.
+Importantly, it can cleanly /scroll right across/ tall images and other jumbo lines -- a perennial problem with scrolling packages to date.  As a bonus, it enables relatively smooth scrolling even with dumb third party mice.
 
-*Do you need this?*  Here's a test to try: open a big heavy-duty emacs buffer, full screen.  While scrolling smoothly such that lines move across your window's height in about 5s, /can you easily read the content you see/, without stopping?  Is text as clear scrolling down as it is going up?  Now, how about in your browser?  I bet it's /very/ readable there.  Shouldn't emacs be like this?
+#+begin_quote
+*Do you need this?*  Here's a test to try: open a big heavy-duty emacs buffer, full screen.  While scrolling smoothly such that lines move across your window's height in about 5sec, /can you easily read the content you see/, without stopping?  Is the text as clear scrolling down as it is going up?  Now, try this exercise again with your browser -- I bet it's /very/ readable there. Shouldn't emacs be like this?  If you scroll buffers with large images, this is also a good reason to give a try.
+#+end_quote
 
 * Compatibility and Usage
 
-This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port.  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.  To install, simply ~git clone~ (or ~package-vc-install~) and:
+This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port.  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.
+
+To install, simply ~git clone~ (or ~package-vc-install~) and:
 
 #+begin_src emacs-lisp
   (use-package ultra-scroll-mac
     :if (eq window-system 'mac)
-    :load-path "~/code/emacs/ultra-scroll-mac"
+    :load-path "~/code/emacs/ultra-scroll-mac" ; if you git clone'd
     :init
     (setq scroll-conservatively 101) ; important for jumbo images
     :config
     (ultra-scroll-mac-mode 1))
 #+end_src
 
-Usage: just start scrolling.
+Usage: just start scrolling :).
 
 * Configuration
 
@@ -29,42 +33,44 @@ There is little to no configuration.  If desired for use with dumb mice, the var
 * Related packages and functionality
 
 - emacs-mac's own builtin ~mac-mwheel-scroll~ :: this venerable code has been providing smooth scrolling on [[https://bitbucket.org/mituharu/emacs-mac/][emacs-mac]] by default for nearly a decade.
-- ~pixel-scroll-precision-mode~ :: fast smooth scrolling by Po Lu, built-in as of Emacs 29.1 (see =pixel-scroll.el=).  ~ultra-scroll-mac~ was initially based on its design, but many elements have changed.  The core scrolling functions have been contributed back upstream.
-- ~pixel-scroll-mode~ :: a simpler line-by-line pixel scrolling mode, also found in also in =pixel-scroll.el=.
-- [[https://github.com/io12/good-scroll.el][good-scroll]] :: an update to ~pixel-scroll-mode~ with variable speed.
+- ~pixel-scroll-precision-mode~ :: new, fast pixel scrolling by Po Lu, built in to Emacs as of v29.1 (see =pixel-scroll.el=).  ~ultra-scroll-mac~ was initially based on its design, but many elements have changed.  The core scrolling functions have been contributed back upstream.
+- ~pixel-scroll-mode~ :: a simpler line-by-line pixel scrolling mode, also found in =pixel-scroll.el=.
+- [[https://github.com/io12/good-scroll.el][good-scroll]] :: an update to the simple ~pixel-scroll-mode~ with variable speed.
 - [[https://github.com/zk-phi/sublimity][sublimity]] :: includes smooth scrolling based on sublime editor.
 
 * Questions
 
 ** What was the motivation behind this?
 
-Picture it: a fast new laptop and 5K monitor with a large heavy-duty buffer like ~python-ts-mode~ in full screen mode.  Mouse scrolling is mostly OK, but default pixel scrolling with the trackpad is just... /slow/. Repeated attempts to rationalize this fail, especially because it's notably worse in one direction than the other.  Emacs feels like (light) molasses.  No bueno.
+Picture it: a fast new laptop and 5K monitor with a large heavy-duty buffer like ~python-ts-mode~ in full screen mode.  Scrolling with a decent mouse is mostly OK, but by default pixel scrolling with the trackpad is just... /painful/. Repeated attempts to rationalize this fail, especially because it's notably worse in one direction than the other.  Scrolling Emacs feels like moving through (light) molasses.  No bueno.
 
-Checking into it, the smooth scroll event callback takes 20ms scrolling in one direction, and 50-60ms in the other.  /But scroll events are arriving every 15ms or less/!  It just couldn't keep up.
+Checking into it, the smooth scroll event callback takes 20ms scrolling in one direction, and 50-60ms in the other.  Perfectly fine for normal mice which might deliver a few scrolling events a second.  /But trackpad scroll events are arriving every 15ms or less/!  The code just couldn't keep up.  Hence the molasses.
 
-I also wanted to be able to peruse image rich documents without worrying about jumpy/loopy scrolling behavior.  And my extra dumb mouse didn't work well either: you'd have scroll quite fast to get any movement at all.
+I also wanted to be able to peruse image rich documents without worrying about jumpy/loopy scrolling behavior.  And my extra dumb mouse didn't work well either: small scrolls did nothing, you'd have scroll pretty aggressively to get any movement at all.
+
+How hard could it be to fix this?  And the adventure began...
 
 ** Why is this emacs-mac only?
 
-Only the emacs-mac port exposes the full pixel-level scrolling event stream of trackpads (and fancy mice).  This makes ultra-scroll-mac much simpler than packages which have to simulate this.
+Only the emacs-mac port exposes the full pixel-level scrolling event stream of trackpads (and fancy mice).  This makes ~ultra-scroll-mac~ much simpler than packages which have to simulate this.  
 
+** So what should I use for other Emacs builds?
+
+I recommend the built-in ~pixel-scroll-precision-mode~.  The core scrolling functions used in ~ultra-scroll-mac~ may be directly useful, and have been contributed upstream for potential inclusion.
+  
 ** How does this compare to the built-in smooth scrolling?
 
 In addition to fast scrolling, the built-in ~pixel-scroll-precision-mode~ (new in Emacs v29.1) effectively simulates a /feature-complete trackpad driver/ in elisp, complete with scroll interpolation, a timer-based /momentum/ phase, etc.  Since all of this is handled by the OS for emacs-mac, it's not necessary to include.
 
-Compared to the built-in, ultra-scroll-mac obviously works with emacs-mac, but is also yet faster, and can handle scrolling past tall images.
+Compared to the built-in precision scrolling, ~ultra-scroll-mac~ obviously works correctly with emacs-mac, but is also even faster, and can smoothly scroll past tall images.
 
-** What about for other Emacs builds?
+** Why are there so many smooth scrolling modes?  Why is this so hard, it's just /scrolling/?
 
-I recommend the built-in ~pixel-scroll-precision-mode~.  The core scrolling functions used in ultra-scroll-mac should be directly useful in other builds, and have been contributed upstream for potential inclusion there.
-  
-** Why are there so many smooth scrolling modes?  Why is this hard?
+Emacs was designed long before mice were common, not to mention modern high-resolution trackpads which send rapid micro-updates ("move up one pixel!") more than 60 times per second.  Unlike other programs, Emacs insists on keeping the cursor (point) visible at all times.  Deep in Emacs' redisplay code, it tracks where point is, and works diligently to ensure it never falls outside the visible window.  It does this not by moving point (that's the user's job), but by moving the /window/ (visible range of lines) surrounding point.
 
-Emacs was designed long before mice were common, not to mention modern high-resolution trackpads which send rapid small scroll updates ("move up one pixel!"), some more than 60 times per second.  Unlike other programs, Emacs insists on keeping the cursor (point) visible at all times.  Deep in Emacs' redisplay code, it tracks where point is, and works to ensure it never falls outside the visible window.  It does this not by moving point (that's the user's job), but by moving the /window/ (visible range of lines) surrounding point.  Once you are used to this behavior, it's actually pretty nice for navigating with =C-n= / =C-p= and friends.
+Once you are used to this behavior, it's actually pretty nice for navigating with =C-n= / =C-p= and friends.  But for smooth scrolling with a trackpad or mouse, it is /very problematic/ -- nothing screams "janky scrolling" like the window lurching back or forth half a page during a scroll.  Or worse: getting caught in an endless loop of scroll-in-one-direction/jump-back-in-the-other.
 
-But for smooth scrolling with a trackpad or mouse, it is /very problematic/ -- nothing screams "not smooth" like the window lurching back or forth half a page during a scroll.  Or worse: getting caught in an endless loop of scroll-in-one-direction/jump-back-in-the-other.
-
-So what should be done?  The elisp info manual (~Textual Scrolling~ / ~set-window-start~) helpfully says:
+So what should be done?  The elisp info manual (~Textual Scrolling~ / ~set-window-start~) helpfully mentions:
 
 #+begin_quote
 ...for reliable results Lisp programs that call this function should
@@ -72,25 +78,34 @@ always move point to be inside the window whose display starts at
 POSITION.
 #+end_quote
 
-Which is all well and good, but /where/ do you find such a point, in advance, safely /inside the window/?  Often this isn't terribly hard, but there is one common case where this admonition falls comically flat: scrolling past images which are /taller than the window/ -- what I call *jumbo lines*.  Where is a safe spot to place point when a jumbo line occupies the entire window height?
+Which is all well and good, but /where/ do you find such a point, in advance, safely /inside the window/?  Often this isn't terribly hard, but there is one common case where this admonition falls comically flat: scrolling past images which are /taller than the window/ -- what I call *jumbo lines*.  Where can I place point /inside the window/ when a jumbo line occupies the entire window height?
 
-As a result of these types of difficulties, pixel scrolling codes are often quite involved, with much of the logic boiling down to a stalwart and increasingly heroic set of attempts to /keep the damn point on screen/ and prevent juddering and looping as you scroll.
+As a result of these types of difficulties, pixel scrolling codes and packages are often quite involved, with much of the logic boiling down to a stalwart and increasingly heroic pile of interwoven attempts to /keep the damn point on screen/ and prevent juddering and looping as you scroll.
 
-For posterity, some things I discovered in my own mostly-successful battle against unwanted recentering during smooth scroll, including across jumbo lines:
+For posterity, some things I discovered in my own mostly-victorious battle against unwanted recentering during smooth scroll, including across jumbo lines:
 
-- ~scroll-conservatively=101~ is helpful, since with this Emacs will "scroll just enough text to bring point into view, even if you move far away".  You cannot let-bind ~scroll-conservatively~, as it comes into play on redisplay (after your event handler returns). 
-- ~vscroll~ -- a virtual rendered scrolling window hiding below the current window -- is key to smooth scrolling, and setting ~vscroll~ is incredibly fast.
-- There is plenty of ~vscroll~ room available, including the entirety of any tall lines (as for displayed images) in view.
+- ~scroll-conservatively=101~ is very helpful, since with this Emacs will "scroll just enough text to bring point into view, even if you move far away".  It does not defeat recentering, but makes it... more manageable.
+- You cannot let-bind ~scroll-conservatively~ for effect, as it comes into play only on redisplay (after your event handler returns). 
+- Virtual Scroll:
+  + ~vscroll~ -- a virtual rendered scrolling window hiding below the current window -- is key to smooth scrolling, and setting ~vscroll~ is incredibly fast.
+  + There is plenty of ~vscroll~ room available, including the entirety of any tall lines (as for displayed images) in view.
+  + ~vscroll~ can sometimes place the point off the visible window (I know, sacrilege), but more often triggers recentering.
 - Scrolling asymmetry:
   + ~vscroll~ is purely one-sided: you can only access a vscroll area /beneath/ the current window view; /there is no negative vscroll/.
   + Unlike ~window-start~, ~window-end~ does not get updated promptly between redisplays and cannot always be trusted. 
-  + For these two reasons, smooth scrolling up and down are /not symmetric/ with each other (and will likely never be).  You need different approaches for each.
+  + For these two reasons, smooth scrolling up and scrolling down are /not symmetric/ with each other (and will likely never be).  You need different approaches for each.
   + If the two approaches for scrolling up and down perform quite differently, the user will feel this difference.
-- For avoiding recentering, naive movement doesn't work.  You need to learn the basic layout of lines on the window /before redisplay/ has occurred.
+- For avoiding recentering, naive movement doesn't work well. You need to learn the basic layout of lines on the window /before redisplay/ has occurred.
+- The "usable window height" deducts any header and the old-fashioned tab-bar, but /not/ the tab-bar-mode bar.
 - Jumbo lines:
-  + When scrolling jumbo lines up towards the buffer's start with ~vscroll~, simply keep /point on the jumbo line/ until it disappears from view.  In this scenario, as a special case, Emacs will not recenter.
-  + This is /not/ true for lines that are smaller than the usable window height (which deduct header and the old-fashioned tab-bar, but /not/ the tab-bar-mode bar). In this case, you must avoid placing point on any line which falls out of view.
-  + When scrolling in the other direction, /up/ past jumbo lines, using ~set-window-start~ (lines of content move down), you must keep point on the jumbo, but /only until it clears the top of the window area/ (even by one pixel).  After this, you must move the point to the line above (and had better insist that ~scroll-conservatively>0~ to prevent recentering).
-- ~pos-visible-in-window-p~ isn't always correct.  Better to use the first line at window-start or directly identify the final line (~pos-at-x-y~) and adjust from there.
+  + Scrolling towards buffer end:
+    * When scrolling with jumbo lines towards the buffer's end (with ~vscroll~), simply keep /point on the jumbo line/ until it disappears from view.  As a special case, Emacs will not re-center when this happens.
+    * This is /not/ true for lines that are smaller than the usable window height. In this case, you must avoid placing point on any line which falls partially out of view.
+  + Scrolling towards buffer start:
+    * When scrolling up past jumbo lines, using ~set-window-start~ (lines of content move down), you must keep point on the jumbo, but /only until it clears the top of the window area/ (even by one pixel).
+    * After this, you must move the point to the line above it (and had better insist that ~scroll-conservatively>0~ to prevent re-centering).
+    * In some cases (depending on truncation/visual-line-mode/etc.), this movement must occur from a position beyond the first full height object (which may not be at the line's start). E.g. one before the visual line end.
+- ~pos-visible-in-window~ doesn't always work near the window boundaries.  Better to use the first line at the window's top or directly identify the final line (both via ~pos-at-x-y~) and adjust from there.
+- There are [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533][display bugs]] with inline images that cause them to misreport pixel measurements and positions sometimes.  Best to guard against these.
 
-The cutting room floor is littered with literally dozens of almost-but-not-quite attempts.
+So all in all, incredibly complicated to get something that works.  The cutting room floor is littered with literally dozens of almost-but-not-quite-working versions.  I'm sure there are many more corner cases, but this gets most things right.
