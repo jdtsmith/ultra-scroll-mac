@@ -104,20 +104,24 @@ DELTA should be less than the window's height."
     (when (>= delta 0) (set-window-vscroll nil delta t t))
     
     ;; Position point to avoid recentering, moving up one line from
-    ;; the bottom, if necessary.  "Jumbo" lines (lines taller than the
+    ;; the bottom, if necessary.  "Jumbo" lines (taller than the
     ;; window height, usually due to images) must be handled
-    ;; carefully.  Once within the window, point should stay on them
-    ;; until the top of the jumbo line clears the top of the window,
-    ;; then immediately moved off (above).  The is the only way to
-    ;; avoid unwanted recentering and motion trapping.
-    (if (> (line-pixel-height) win-height) ; a jumbo!
-	(if-let ((pv (pos-visible-in-window-p nil nil t))
-		 ((and (> (length pv) 2) ; falls partially outside window
-		       (zerop (nth 2 pv))))) ; but not at the top
-	    (goto-char new-start))
-      (goto-char (posn-point (posn-at-x-y 0 (1- win-height))))
-      (vertical-motion -1)
-      (if (< initial (point)) (goto-char initial)))))
+    ;; carefully.  Once they are within the window, point should stay
+    ;; on the first tall object on the line until the top of the jumbo
+    ;; line clears the top of the window, then immediately moved off
+    ;; (above), via the full height character.  The is the only way to
+    ;; avoid unwanted re-centering/motion trapping.
+    (if (> (line-pixel-height) win-height) ; a jumbo on the line!
+	(let ((end (save-excursion (end-of-visual-line) (point))))
+	  (when-let ((pv (pos-visible-in-window-p end nil t))
+		     ((and (> (length pv) 2) ; falls outside window
+			   (zerop (nth 2 pv))))) ; but not at the top
+	    (goto-char end) ; eol is always full height
+	    (goto-char start))) ; move up
+      (when-let ((p (posn-at-x-y 0 (1- win-height))))
+	(goto-char (posn-point p))
+	(vertical-motion -1)
+	(if (< initial (point)) (goto-char initial))))))
 
 (defun ultra-scroll-mac (event &optional arg)
   "Smooth scroll mac-style scroll EVENT.
