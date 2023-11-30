@@ -119,8 +119,8 @@ DELTA should be less than the window's height."
 	  (when-let ((pv (pos-visible-in-window-p end nil t))
 		     ((and (> (length pv) 2) ; falls outside window
 			   (zerop (nth 2 pv))))) ; but not at the top
-	    (goto-char end) ; eol is always full height
-	    (goto-char start))) ; move up
+	    (goto-char end) ; eol is usually full height
+	    (goto-char start))) ; now move up
       (when-let ((p (posn-at-x-y 0 (1- win-height))))
 	(goto-char (posn-point p))
 	(vertical-motion -1)
