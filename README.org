@@ -33,11 +33,11 @@ There is little to no configuration.  If desired for use with dumb mice, the var
 
 * Related packages and functionality
 
-- emacs-mac's own builtin ~mac-mwheel-scroll~ :: this venerable code has been providing smooth scrolling on [[https://bitbucket.org/mituharu/emacs-mac/][emacs-mac]] by default for nearly a decade.
-- ~pixel-scroll-precision-mode~ :: new, fast pixel scrolling by Po Lu, built in to Emacs as of v29.1 (see =pixel-scroll.el=).  ~ultra-scroll-mac~ was initially based on its design, but many elements have changed.  The core scrolling functions have been contributed back upstream.
-- ~pixel-scroll-mode~ :: a simpler line-by-line pixel scrolling mode, also found in =pixel-scroll.el=.
-- [[https://github.com/io12/good-scroll.el][good-scroll]] :: an update to the simple ~pixel-scroll-mode~ with variable speed.
-- [[https://github.com/zk-phi/sublimity][sublimity]] :: includes smooth scrolling based on sublime editor.
+- emacs-mac's own builtin ~mac-mwheel-scroll~ :: This venerable code has been providing smooth scrolling on [[https://bitbucket.org/mituharu/emacs-mac/][emacs-mac]] by default for nearly a decade.
+- ~pixel-scroll-precision-mode~ :: New, fast pixel scrolling by Po Lu, built in to Emacs as of v29.1 (see =pixel-scroll.el=).  ~ultra-scroll-mac~ was initially based on its design, but many elements have changed.  The core scrolling functions have been contributed back upstream.
+- ~pixel-scroll-mode~ :: A simpler line-by-line pixel scrolling mode, also found in =pixel-scroll.el=.
+- [[https://github.com/io12/good-scroll.el][good-scroll]] :: An update to the simple ~pixel-scroll-mode~ with variable speed.
+- [[https://github.com/zk-phi/sublimity][sublimity]] :: Includes smooth scrolling based on sublime editor.
 
 * Questions
 
