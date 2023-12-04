@@ -83,7 +83,7 @@ Which is all well and good, but /where/ do you find such a point, in advance, sa
 
 As a result of these types of difficulties, pixel scrolling codes and packages are often quite involved, with much of the logic boiling down to a stalwart and increasingly heroic pile of interwoven attempts to /keep the damn point on screen/ and prevent juddering and looping as you scroll.
 
-** What should I know about scrolling Emacs if I am developing my own related package?
+** What should I know about developing scrolling modes for Emacs?
 
 For posterity, some things I discovered in my own mostly-victorious battle against unwanted recentering during smooth scroll, including across jumbo lines:
 
@@ -109,6 +109,9 @@ For posterity, some things I discovered in my own mostly-victorious battle again
     * After this, you must move the point to the line above it (and had better insist that ~scroll-conservatively>0~ to prevent re-centering).
     * In some cases (depending on truncation/visual-line-mode/etc.), this movement must occur from a position beyond the first full height object (which may not be at the line's start). E.g. one before the visual line end.
 - ~pos-visible-in-window~ doesn't always work near the window boundaries.  Better to use the first line at the window's top or directly identify the final line (both via ~pos-at-x-y~) and adjust from there.
-- There are [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533][display bugs]] with inline images that cause them to misreport pixel measurements and positions sometimes.  Best to guard against these.
+- Display bugs
+  + There are [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533][display bugs]] with inline images that cause them to misreport pixel measurements and positions sometimes.
+  + These lead to slightly staccato scrolling in such buffers and ~height=0~ gets erroneously reported, so can't be used to find beginning of buffer.  Best to guard against these.
+  + *Update:* Two display bugs have been fixed in master as of Dec, 2023, so scrolling with lots of inline images will soon be even smoother.
 
-So all in all, incredibly complicated to get something that works.  The cutting room floor is littered with literally dozens of almost-but-not-quite-working versions.  I'm sure there are many more corner cases, but this gets most things right.
+So all in all, quite complicated to get something that works as you'd hope.  The cutting room floor is littered with literally dozens of almost-but-not-quite-working versions.  I'm sure there are many more corner cases, but the current design gets most things right in my usage.

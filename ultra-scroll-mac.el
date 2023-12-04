@@ -114,7 +114,7 @@ DELTA should be less than the window's height."
     (if (> (line-pixel-height) win-height) ; a jumbo on the line!
 	(let ((end (max (point)
 			(save-excursion
-			  (end-of-visual-line) 
+			  (end-of-visual-line)
 			  (1- (point)))))) ; don't fall off
 	  (when-let ((pv (pos-visible-in-window-p end nil t))
 		     ((and (> (length pv) 2) ; falls outside window
