@@ -11,7 +11,7 @@ Here's a test to try: open a big heavy-duty emacs buffer, full screen.  While sc
 
 * Compatibility and Usage
 
-This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port (see [why](https://github.com/jdtsmith/ultra-scroll-mac#why-is-this-emacs-mac-only)).  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.
+This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port (see [[https://github.com/jdtsmith/ultra-scroll-mac#why-is-this-emacs-mac-only][why]]).  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.
 
 To install, simply ~git clone~ (or ~package-vc-install~) and:
 
