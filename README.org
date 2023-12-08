@@ -25,6 +25,20 @@ To install, simply ~git clone~ (or ~package-vc-install~) and:
     (ultra-scroll-mac-mode 1))
 #+end_src
 
+If you use [[https://github.com/radian-software/straight.el][straight]]:
+
+#+begin_src emacs-lisp
+  (use-package ultra-scroll-mac
+    :straight (ultra-scroll-mac :type git
+                                :host github
+                                :repo "jdtsmith/ultra-scroll-mac")
+    :if (eq window-system 'mac)
+    :init
+    (setq scroll-conservatively 101)      ; important for jumbo images
+    :config
+    (ultra-scroll-mac-mode 1))
+#+end_src
+
 Usage: just start scrolling :).
 
 * Configuration
