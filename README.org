@@ -1,6 +1,8 @@
 #+TITLE: ultra-scroll-mac: scroll emacs-mac like lightning
 
-~ultra-scroll-mac~ is a smooth-scrolling package for [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]].  It provides highly optimized, pixel-precise smooth scrolling which can readily keep up with the /very/ high event rates of modern trackpads and high-precision wheel mice.  You move your fingers, the page responds, instantly.
+~ultra-scroll-mac~ is a smooth-scrolling package for [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]].  It provides highly optimized, pixel-precise smooth scrolling which can readily keep up with the /very/ high event rates of modern trackpads and high-precision wheel mice.  You move your fingers, the page responds, instantly:
+
+[[https://github-production-user-asset-6210df.s3.amazonaws.com/93749/290018933-ed5cf414-eab5-4ba8-b077-30cac0c5ace0.mov]]
 
 Importantly, it can cleanly /scroll right across/ tall images and other jumbo lines -- a perennial problem with scrolling packages to date.  As a bonus, it enables relatively smooth scrolling even with dumb third party mice.
 
@@ -8,6 +10,8 @@ Importantly, it can cleanly /scroll right across/ tall images and other jumbo li
 #+begin_quote
 Here's a test to try: open a big heavy-duty emacs buffer, full screen.  While scrolling smoothly such that lines move across your window's height in about 5sec, /can you easily read the content you see/, without stopping?  Is the text as clear scrolling down as it is going up?  Now, try this exercise again with your browser -- I bet it's /very/ readable there. Shouldn't emacs be like this?  If you scroll buffers with large images, this is also a good reason to give a try.
 #+end_quote
+
+
 
 * Compatibility and Usage
 
