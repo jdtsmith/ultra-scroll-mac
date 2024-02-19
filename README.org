@@ -18,8 +18,6 @@ Importantly, it can cleanly /scroll right across/ tall images and other jumbo li
 
 - If you scroll buffers with large images, this is also a good reason to give a try.
 
-
-
 * Compatibility and Usage
 
 This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port (see [[https://github.com/jdtsmith/ultra-scroll-mac#why-is-this-emacs-mac-only][why]]).  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.
@@ -42,6 +40,7 @@ Usage: just start scrolling :).
 * Configuration
 
 There is little to no configuration.  If desired for use with dumb mice, the variable ~ultra-scroll-mac-multiplier~ can be set to a number smaller or larger than ~1.0~ to decrease/increase scrolling speed.  Note that many fancier mice have drivers that /simulate/ trackpads, so this variable will have no effect on them.
+
 
 * Related packages and functionality
 
