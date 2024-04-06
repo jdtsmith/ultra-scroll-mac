@@ -1,23 +1,29 @@
-# ultra-scroll-mac: scroll emacs-mac like lightning"
+---
+author: J.D. Smith
+---
 
-- [Compatibility, Installation, and
-  Usage](#compatibility-installation-and-usage)
-- [Configuration](#configuration)
-- [Related packages and
-  functionality](#related-packages-and-functionality)
-- [Questions](#questions)
-  - [What was the motivation behind
-    this?](#what-was-the-motivation-behind-this)
-  - [Why is this emacs-mac only?](#why-is-this-emacs-mac-only)
-  - [So what should I use for other Emacs
-    builds?](#so-what-should-i-use-for-other-emacs-builds)
-  - [How does this compare to the built-in smooth
-    scrolling?](#how-does-this-compare-to-the-built-in-smooth-scrolling)
-  - [Why are there so many smooth scrolling modes? Why is this so hard,
-    it's just
-    *scrolling*?](#why-are-there-so-many-smooth-scrolling-modes-why-is-this-so-hard-its-just-scrolling)
-  - [What should I know about developing scrolling modes for
-    Emacs?](#what-should-i-know-about-developing-scrolling-modes-for-emacs)
+- [ultra-scroll-mac: scroll emacs-mac like
+  lightning](#ultra-scroll-mac-scroll-emacs-mac-like-lightning)
+  - [Compatibility, Installation, and
+    Usage](#compatibility-installation-and-usage)
+  - [Configuration](#configuration)
+  - [Related packages and
+    functionality](#related-packages-and-functionality)
+  - [Questions](#questions)
+    - [What was the motivation behind
+      this?](#what-was-the-motivation-behind-this)
+    - [Why is this emacs-mac only?](#why-is-this-emacs-mac-only)
+    - [So what should I use for other Emacs
+      builds?](#so-what-should-i-use-for-other-emacs-builds)
+    - [How does this compare to the built-in smooth
+      scrolling?](#how-does-this-compare-to-the-built-in-smooth-scrolling)
+    - [Why are there so many smooth scrolling modes? Why is this so
+      hard, it's just
+      *scrolling*?](#why-are-there-so-many-smooth-scrolling-modes-why-is-this-so-hard-its-just-scrolling)
+    - [What should I know about developing scrolling modes for
+      Emacs?](#what-should-i-know-about-developing-scrolling-modes-for-emacs)
+
+# ultra-scroll-mac: scroll emacs-mac like lightning
 
 `ultra-scroll-mac` is a smooth-scrolling package for
 [emacs-mac](https://bitbucket.org/mituharu/emacs-mac). It provides
@@ -49,7 +55,7 @@ mice.
 > If you scroll buffers with large images, this is also a good reason to
 > give a try.
 
-# Compatibility, Installation, and Usage
+## Compatibility, Installation, and Usage
 
 > [!WARNING]
 > This is only for the
@@ -74,7 +80,7 @@ like:
 
 **Usage**: just start scrolling :).
 
-# Configuration
+## Configuration
 
 There is little to no configuration. If desired for use with dumb mice,
 the variable `ultra-scroll-mac-multiplier` can be set to a number
@@ -90,7 +96,7 @@ temporarily increased. The defaults should work well for most
 situations, but if necessary, can be configured using
 `ultra-scroll-mac-gc-percentage` and `ultra-scroll-mac-gc-idle-time`.
 
-# Related packages and functionality
+## Related packages and functionality
 
 emacs-mac's own builtin `mac-mwheel-scroll`  
 This venerable code has been providing smooth scrolling on
@@ -113,9 +119,9 @@ An update to the simple `pixel-scroll-mode` with variable speed.
 [sublimity](https://github.com/zk-phi/sublimity)  
 Includes smooth scrolling based on sublime editor.
 
-# Questions
+## Questions
 
-## What was the motivation behind this?
+### What was the motivation behind this?
 
 Picture it: a fast new laptop and 5K monitor with a large heavy-duty,
 full-screen buffer in `python-ts-mode`. Scrolling with a decent mouse is
@@ -137,19 +143,19 @@ aggressively to get any movement at all.
 
 How hard could it be to fix this? And the adventure began…
 
-## Why is this emacs-mac only?
+### Why is this emacs-mac only?
 
 Only the emacs-mac port exposes the full pixel-level scrolling event
 stream of trackpads (and fancy mice). This makes `ultra-scroll-mac` much
 simpler than packages which have to simulate this.
 
-## So what should I use for other Emacs builds?
+### So what should I use for other Emacs builds?
 
 I recommend the built-in `pixel-scroll-precision-mode`. The core
 scrolling functions used in `ultra-scroll-mac` may be directly useful,
 and have been contributed upstream for potential inclusion.
 
-## How does this compare to the built-in smooth scrolling?
+### How does this compare to the built-in smooth scrolling?
 
 In addition to fast scrolling, the built-in
 `pixel-scroll-precision-mode` (new in Emacs v29.1) effectively simulates
@@ -161,7 +167,7 @@ Compared to the built-in precision scrolling, `ultra-scroll-mac`
 obviously works correctly with emacs-mac, but is also even faster, and
 can smoothly scroll past tall images.
 
-## Why are there so many smooth scrolling modes? Why is this so hard, it's just *scrolling*?
+### Why are there so many smooth scrolling modes? Why is this so hard, it's just *scrolling*?
 
 Emacs was designed long before mice were common, not to mention modern
 high-resolution trackpads which send rapid micro-updates ("move up one
@@ -199,7 +205,7 @@ to a stalwart and increasingly heroic pile of interwoven attempts to
 *keep the damn point on screen* and prevent juddering and looping as you
 scroll.
 
-## What should I know about developing scrolling modes for Emacs?
+### What should I know about developing scrolling modes for Emacs?
 
 For posterity, some things I discovered in my own mostly-victorious
 battle against unwanted recentering during smooth scroll, including
