@@ -40,6 +40,7 @@
 (require 'mac-win nil 'noerror)
 (require 'pixel-scroll)
 (require 'mwheel)
+(require 'timer)
 
 ;;;; Customize
 (defcustom ultra-scroll-mac-multiplier 1.
@@ -52,6 +53,19 @@ will not be affected by this setting.  Adjust scrolling speed
 directly with those drivers instead."
   :group 'mouse
   :type 'float)
+
+(defcustom ultra-scroll-mac-gc-percentage 0.67
+  "Value to temporarily set `gc-cons-percentage'.
+This is set when a trackpad event registers :phase began, and
+restored during idle time (see `ultra-scroll-mac-gc-idle-time')."
+  :type '(choice (const :tag "Disable" nil) float)
+  :group 'mouse)
+
+(defcustom ultra-scroll-mac-gc-idle-time 0.5
+  "Idle time in sec after which to restore `gc-cons-percentage'.
+Operates only if `ultra-scroll-mac-gc-percentage' is non-nil."
+  :type 'float
+  :group 'mouse)
 
 ;;;; Event callback/scroll
 (defun ultra-scroll-mac-down (delta)
@@ -126,12 +140,22 @@ DELTA should be less than the window's height."
 	(vertical-motion -1)
 	(if (< initial (point)) (goto-char initial))))))
 
+(defvar ultra-scroll-mac--gc-percentage-orig nil)
+(defvar ultra-scroll-mac--gc-idle-timer nil)
+(defun ultra-scroll-mac--restore-gc ()
+  "Reset GC variable during idle time."
+  (setq gc-cons-percentage
+	(or ultra-scroll-mac--gc-percentage-orig 0.1)
+	ultra-scroll-mac--gc-idle-timer nil))
+
 (defun ultra-scroll-mac (event &optional arg)
   "Smooth scroll mac-style scroll EVENT.
 Event and optional ARG are passed on to `mwheel-scroll', for any
 events not handled here.  If swipe-tracking is enabled for
 swipe-between-pages at the OS level, left-/right-swipe events
-will be replayed."
+will be replayed.  If `ultra-scroll-mac-gc-percentage' is
+non-nil, temporarily lift the garbage collection percentage to
+avoid GC's during scroll."
   (interactive "e")
   (let ((ev-type (event-basic-type event))
 	(plist (nth 3 event)))
@@ -153,6 +177,14 @@ will be replayed."
 			  (cdr event))
 		    unread-command-events))))
       ;;  Wheel events: smooth scrolling
+      (when (and ultra-scroll-mac-gc-percentage
+		 (not ultra-scroll-mac--gc-idle-timer)
+		 (eq (plist-get plist :phase) 'began))
+	(setq gc-cons-percentage 	; reduce GC's during scroll
+	      (max gc-cons-percentage ultra-scroll-mac-gc-percentage)
+	      ultra-scroll-mac--gc-idle-timer
+	      (run-with-idle-timer ultra-scroll-mac-gc-idle-time nil
+				   #'ultra-scroll-mac--restore-gc)))
       (let ((dy (plist-get plist :delta-y))
 	    (delta (plist-get plist :scrolling-delta-y))
 	    (window (mwheel-event-window event))
@@ -208,7 +240,8 @@ of `ultra-scroll-mode', which see."
 		#'ultra-scroll-mac)
     (setf (get 'ultra-scroll-use-momentum 'orig-value)
 	  pixel-scroll-precision-use-momentum)
-    (setq pixel-scroll-precision-use-momentum nil))
+    (setq pixel-scroll-precision-use-momentum nil)
+    (setq ultra-scroll-mac--gc-percentage-orig gc-cons-percentage))
    (t
     (define-key pixel-scroll-precision-mode-map [remap pixel-scroll-precision] nil)
     (setq pixel-scroll-precision-use-momentum
