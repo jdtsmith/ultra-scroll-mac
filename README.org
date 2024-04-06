@@ -6,7 +6,6 @@
 
 Importantly, it can cleanly /scroll right across/ tall images and other jumbo lines -- a perennial problem with scrolling packages to date.  As a bonus, it enables relatively smooth scrolling even with dumb third party mice.
 
-
   #+begin_note
   *Do you need this?*
   

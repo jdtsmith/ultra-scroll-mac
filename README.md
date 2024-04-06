@@ -1,7 +1,23 @@
----
-author: J.D. Smith
-title: "ultra-scroll-mac: scroll emacs-mac like lightning"
----
+# ultra-scroll-mac: scroll emacs-mac like lightning"
+
+- [Compatibility, Installation, and
+  Usage](#compatibility-installation-and-usage)
+- [Configuration](#configuration)
+- [Related packages and
+  functionality](#related-packages-and-functionality)
+- [Questions](#questions)
+  - [What was the motivation behind
+    this?](#what-was-the-motivation-behind-this)
+  - [Why is this emacs-mac only?](#why-is-this-emacs-mac-only)
+  - [So what should I use for other Emacs
+    builds?](#so-what-should-i-use-for-other-emacs-builds)
+  - [How does this compare to the built-in smooth
+    scrolling?](#how-does-this-compare-to-the-built-in-smooth-scrolling)
+  - [Why are there so many smooth scrolling modes? Why is this so hard,
+    it's just
+    *scrolling*?](#why-are-there-so-many-smooth-scrolling-modes-why-is-this-so-hard-its-just-scrolling)
+  - [What should I know about developing scrolling modes for
+    Emacs?](#what-should-i-know-about-developing-scrolling-modes-for-emacs)
 
 `ultra-scroll-mac` is a smooth-scrolling package for
 [emacs-mac](https://bitbucket.org/mituharu/emacs-mac). It provides
