@@ -202,6 +202,8 @@ of `ultra-scroll-mode', which see."
       (error "Precision Scroll Mac Mode works only with emacs-mac (not NS), you have:\n %s" (emacs-version)))
     (unless (> scroll-conservatively 0)
       (warn "ultra-scroll-mac: scroll-conservatively > 0 is required for smooth scrolling of large images; 101 recommended"))
+    (unless (= scroll-margin 0)
+      (warn "ultra-scroll-mac: scroll-margin = 0 is required for glitch-free smooth scrolling"))
     (define-key pixel-scroll-precision-mode-map [remap pixel-scroll-precision]
 		#'ultra-scroll-mac)
     (setf (get 'ultra-scroll-use-momentum 'orig-value)
