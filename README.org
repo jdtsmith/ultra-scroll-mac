@@ -6,23 +6,25 @@
 
 Importantly, it can cleanly /scroll right across/ tall images and other jumbo lines -- a perennial problem with scrolling packages to date.  As a bonus, it enables relatively smooth scrolling even with dumb third party mice.
 
-* *Do you need this?*
 
-- If you don't scroll with a high-speed device (modern mouse or trackpad), no.
-
-- If you do, but aren't sure, here's a good test to try:
-
-  #+begin_quote
+  #+begin_note
+  *Do you need this?*
+  
+  If you don't scroll with a high-speed device (modern mouse or trackpad), no.  If you do, but aren't sure, here's a good test to try:
+  
   Open a big, heavy-duty emacs buffer, full screen.  While scrolling smoothly such that lines move across your window's height in a few seconds, /can you easily read the content you see/, without stopping?  Is the text as clear scrolling down as it is up?  Now, try this exercise again with your browser -- I bet it's /very/ readable there. Shouldn't emacs be like this?
-  #+end_quote
+  
+  If you scroll buffers with large images, this is also a good reason to give a try.
+  #+end_note
 
-- If you scroll buffers with large images, this is also a good reason to give a try.
 
-* Compatibility and Usage
+* Compatibility, Installation, and Usage
 
+#+begin_warning
 This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port (see [[https://github.com/jdtsmith/ultra-scroll-mac#why-is-this-emacs-mac-only][why]]).  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.
+#+end_warning
 
-To install, simply ~git clone~ (or ~package-vc-install~) and:
+*Install*: simply ~git clone~ (or ~package-vc-install~) and setup like:
 
 #+begin_src emacs-lisp
   (use-package ultra-scroll-mac
@@ -35,12 +37,13 @@ To install, simply ~git clone~ (or ~package-vc-install~) and:
     (ultra-scroll-mac-mode 1))
 #+end_src
 
-Usage: just start scrolling :).
+*Usage*: just start scrolling :).
 
 * Configuration
 
-There is little to no configuration.  If desired for use with dumb mice, the variable ~ultra-scroll-mac-multiplier~ can be set to a number smaller or larger than ~1.0~ to decrease/increase scrolling speed.  Note that many fancier mice have drivers that /simulate/ trackpads, so this variable will have no effect on them.
+There is little to no configuration.  If desired for use with dumb mice, the variable ~ultra-scroll-mac-multiplier~ can be set to a number smaller or larger than ~1.0~ to decrease/increase mouse-wheel scrolling speed.  Note that many fancier mice have drivers that /simulate/ trackpads, so this variable will have no effect on them.  For these, and for the trackpad itself, scrolling speed should be configured in MacOS settings.
 
+To reduce the likelihood of garbage collection during scroll, which can introduce slight pauses, the value of ~gc-cons-percentage~ is temporarily increased.  The defaults should work well for most situations, but if necessary, can be configured using ~ultra-scroll-mac-gc-percentage~ and ~ultra-scroll-mac-gc-idle-time~.
 
 * Related packages and functionality
 
