@@ -263,8 +263,7 @@ across jumbo lines:
   directly identify the final line (both via `pos-at-x-y`) and adjust
   from there.
 - Display bugs
-  - There are [display
-    bugs](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533) with
+  - There are [display](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533) [bugs](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67604) with
     inline images that cause them to misreport pixel measurements and
     positions sometimes.
   - These lead to slightly staccato scrolling in such buffers and
@@ -272,7 +271,7 @@ across jumbo lines:
     beginning of buffer. Best to guard against these.
   - **Update:** Two display bugs have been fixed in master as of Dec,
     2023, so scrolling with lots of inline images will soon be even
-    smoother.
+    smoother.  [One bug]([url](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67604)) related to motion skipping visual-wrapped lines with images at line start remains. 
 
 So all in all, quite complicated to get something that works as you'd
 hope. The cutting room floor is littered with literally dozens of
