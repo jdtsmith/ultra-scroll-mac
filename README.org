@@ -23,12 +23,19 @@ Importantly, it can cleanly /scroll right across/ tall images and other jumbo li
 This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] port (see [[https://github.com/jdtsmith/ultra-scroll-mac#why-is-this-emacs-mac-only][why]]).  ~M-x emacs-version~ should mention ~Carbon~, not ~NS~, and ~window-system~ should be ~mac~.
 #+end_warning
 
-*Install*: simply ~git clone~ (or ~package-vc-install~) and setup like:
+*Install*: For Emacs 29.1 and later, use ~package-vc-install~.  In the ~*scratch*~ buffer, enter
+
+#+begin_src emacs-lisp
+  (package-vc-install '(ultra-scroll-mac :vc-backend Git :url  "https://github.com/jdtsmith/ultra-scroll-mac"))
+#+end_src
+
+move to the final paren, and =C-x C-e=.
+
 
 #+begin_src emacs-lisp
   (use-package ultra-scroll-mac
     :if (eq window-system 'mac)
-    :load-path "~/code/emacs/ultra-scroll-mac" ; if you git clone'd
+    ;:load-path "~/code/emacs/ultra-scroll-mac" ; if you git clone'd instead of package-vc-install
     :init
     (setq scroll-conservatively 101 ; important!
           scroll-margin 0) 

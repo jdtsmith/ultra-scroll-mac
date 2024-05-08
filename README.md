@@ -1,4 +1,6 @@
-# ultra-scroll-mac: scroll emacs-mac like lightning
+---
+author: J.D. Smith
+---
 
 - [ultra-scroll-mac: scroll emacs-mac like
   lightning](#ultra-scroll-mac-scroll-emacs-mac-like-lightning)
@@ -21,6 +23,7 @@
     - [What should I know about developing scrolling modes for
       Emacs?](#what-should-i-know-about-developing-scrolling-modes-for-emacs)
 
+# ultra-scroll-mac: scroll emacs-mac like lightning
 
 `ultra-scroll-mac` is a smooth-scrolling package for
 [emacs-mac](https://bitbucket.org/mituharu/emacs-mac). It provides
@@ -61,13 +64,19 @@ mice.
 > `M-x emacs-version` should mention `Carbon`, not `NS`, and
 > `window-system` should be `mac`.
 
-**Install**: simply `git clone` (or `package-vc-install`) and setup
-like:
+**Install**: For Emacs 29.1 and later, use `package-vc-install`. In the
+`*scratch*` buffer, enter
+
+``` commonlisp
+(package-vc-install '(ultra-scroll-mac :vc-backend Git :url  "https://github.com/jdtsmith/ultra-scroll-mac"))
+```
+
+move to the final paren, and `C-x C-e`.
 
 ``` commonlisp
 (use-package ultra-scroll-mac
   :if (eq window-system 'mac)
-  :load-path "~/code/emacs/ultra-scroll-mac" ; if you git clone'd
+  ;:load-path "~/code/emacs/ultra-scroll-mac" ; if you git clone'd instead of package-vc-install
   :init
   (setq scroll-conservatively 101 ; important!
         scroll-margin 0) 
