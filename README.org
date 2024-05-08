@@ -29,8 +29,7 @@ This is only for the [[https://bitbucket.org/mituharu/emacs-mac][emacs-mac]] por
   (package-vc-install '(ultra-scroll-mac :vc-backend Git :url  "https://github.com/jdtsmith/ultra-scroll-mac"))
 #+end_src
 
-move to the final paren, and =C-x C-e=.
-
+move to the final paren, and =C-x C-e=.  Installation is then simple:
 
 #+begin_src emacs-lisp
   (use-package ultra-scroll-mac

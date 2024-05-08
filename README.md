@@ -1,27 +1,3 @@
----
-author: J.D. Smith
----
-
-- [ultra-scroll-mac: scroll emacs-mac like
-  lightning](#ultra-scroll-mac-scroll-emacs-mac-like-lightning)
-  - [Compatibility, Installation, and
-    Usage](#compatibility-installation-and-usage)
-  - [Configuration](#configuration)
-  - [Related packages and
-    functionality](#related-packages-and-functionality)
-  - [Questions](#questions)
-    - [What was the motivation behind
-      this?](#what-was-the-motivation-behind-this)
-    - [Why is this emacs-mac only?](#why-is-this-emacs-mac-only)
-    - [So what should I use for other Emacs
-      builds?](#so-what-should-i-use-for-other-emacs-builds)
-    - [How does this compare to the built-in smooth
-      scrolling?](#how-does-this-compare-to-the-built-in-smooth-scrolling)
-    - [Why are there so many smooth scrolling modes? Why is this so
-      hard, it's just
-      *scrolling*?](#why-are-there-so-many-smooth-scrolling-modes-why-is-this-so-hard-its-just-scrolling)
-    - [What should I know about developing scrolling modes for
-      Emacs?](#what-should-i-know-about-developing-scrolling-modes-for-emacs)
 
 # ultra-scroll-mac: scroll emacs-mac like lightning
 
@@ -71,7 +47,7 @@ mice.
 (package-vc-install '(ultra-scroll-mac :vc-backend Git :url  "https://github.com/jdtsmith/ultra-scroll-mac"))
 ```
 
-move to the final paren, and `C-x C-e`.
+move to the final paren, and `C-x C-e`. Installation is then simple:
 
 ``` commonlisp
 (use-package ultra-scroll-mac
@@ -272,7 +248,8 @@ across jumbo lines:
   directly identify the final line (both via `pos-at-x-y`) and adjust
   from there.
 - Display bugs
-  - There are [display](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533) [bugs](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67604) with
+  - There are [display
+    bugs](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67533) with
     inline images that cause them to misreport pixel measurements and
     positions sometimes.
   - These lead to slightly staccato scrolling in such buffers and
@@ -280,7 +257,7 @@ across jumbo lines:
     beginning of buffer. Best to guard against these.
   - **Update:** Two display bugs have been fixed in master as of Dec,
     2023, so scrolling with lots of inline images will soon be even
-    smoother.  [One bug]([url](https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67604)) related to motion skipping visual-wrapped lines with images at line start remains. 
+    smoother.
 
 So all in all, quite complicated to get something that works as you'd
 hope. The cutting room floor is littered with literally dozens of
