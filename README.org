@@ -51,8 +51,8 @@ On Linux, getting proper pixel-level wheel mouse input can be finicky, depending
   (use-package ultra-scroll
     ;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
     :init
-    (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
-          scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+    (setq scroll-conservatively 3) ; or whatever value you prefer, since v0.4
+  	;scroll-margin 0)        ; scroll-margin>0 is now supported, since v0.7
     :config
     (ultra-scroll-mode 1))
 #+end_src
@@ -189,7 +189,7 @@ For posterity, some things I discovered in my own mostly-victorious battle again
 
 - ~scroll-conservatively=101~ is very helpful, since with this Emacs will "scroll just enough text to bring point into view, even if you move far away".  It does not defeat re-centering, but makes it... more manageable.  
 - You cannot let-bind ~scroll-conservatively~ for effect, as it comes into play only on re-display (after your event handler returns).  But (I discovered later) you /can/ set it /temporarily/ and restore it during idle time without ill effect.
-- ~scroll-margin>0~ is a no-no.  This setting always moves point at least that many lines away from the window boundaries, which, unless you can reliably place point there during the scroll (even in the presence of /jumbo lines/; see below), will cause loop-back.  See #3.
+- ~scroll-margin>0~ was considered a no-no.  This setting always moves point at least that many lines away from the window boundaries, which, unless you can reliably place point there during the scroll (even in the presence of /jumbo lines/; see below), will cause loop-back.  See #3.  It can be set to zero during scroll and restored when complete.  The window will likely "jump" afterwards on the next movement.
 - Virtual Scroll:
   + ~vscroll~ -- a virtual rendered scrolling window hiding /below/ the current window -- is key to smooth scrolling, and altering ~vscroll~ to move the view-port is incredibly fast.
   + There is plenty of ~vscroll~ room available, including the entirety of any tall lines (as for displayed images) in view.

@@ -95,8 +95,8 @@ Configuration is then simple:
 (use-package ultra-scroll
   ;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
   :init
-  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
-        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+  (setq scroll-conservatively 3) ; or whatever value you prefer, since v0.4
+        ;scroll-margin 0)        ; scroll-margin>0 is now supported, since v0.7
   :config
   (ultra-scroll-mode 1))
 ```
@@ -360,10 +360,12 @@ across jumbo lines:
   into play only on re-display (after your event handler returns). But
   (I discovered later) you *can* set it *temporarily* and restore it
   during idle time without ill effect.
-- `scroll-margin>0` is a no-no. This setting always moves point at least
-  that many lines away from the window boundaries, which, unless you can
-  reliably place point there during the scroll (even in the presence of
-  *jumbo lines*; see below), will cause loop-back. See \#3.
+- `scroll-margin>0` was considered a no-no. This setting always moves
+  point at least that many lines away from the window boundaries, which,
+  unless you can reliably place point there during the scroll (even in
+  the presence of *jumbo lines*; see below), will cause loop-back. See
+  \#3. It can be set to zero during scroll and restored when complete.
+  The window will likely "jump" afterwards on the next movement.
 - Virtual Scroll:
   - `vscroll` – a virtual rendered scrolling window hiding *below* the
     current window – is key to smooth scrolling, and altering `vscroll`
