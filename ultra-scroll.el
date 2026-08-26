@@ -92,6 +92,13 @@ sequence will push the mark."
 		 (const :value every :tag "On every new scroll"))
   :group 'scrolling)
 
+(defcustom ultra-scroll-throttle-mode-line nil
+  "Whether to throttle the mode line during scroll."
+  :type '(choice (const :value nil :tag "No throttling")
+		 (const :value t :tag "Default throttling")
+		 (float :tag "Throttle time (seconds)"))
+  :group 'scrolling)
+
 (defcustom ultra-scroll-hide-functions '(hl-line-mode)
   "Functions to call when scrolling begins and ends.
 The hook runs only when point reaches the window boundary (i.e. when
@@ -222,13 +229,45 @@ actions."
 					 #'ultra-scroll--leave-restore
 					 (window-buffer window) window)))))
 
-;;;; Other scroll begin/end config actions
+;;;; Other scroll begin/end config actions (immediately during scroll)
 (defvar ultra-scroll--gc-percentage-orig nil)
 (defvar ultra-scroll--scroll-conservatively-orig nil)
 (defvar ultra-scroll--scroll-margin-orig nil)
 (defvar ultra-scroll--timer nil)
-(defun ultra-scroll--end-scroll ()
-  "Reset GC variable and scroll settings during idle time."
+(defvar-local ultra-scroll--mode-line-throttle-time nil)
+(defvar-local ultra-scroll--mode-line nil)
+(put 'ultra-scroll--mode-line 'risky-local-variable t)
+
+(defun ultra-scroll--update-throttled-mode-line (win &optional buf reset)
+  "Update the throttled mode line value in window WIN.
+If BUF is non-nil, it should be the `window-buffer' of WIN.  If RESET is
+non-nil, reset `mode-line-format' in BUF to its original value."
+  (let* ((buf (or buf (window-buffer win)))
+	 (mlf (buffer-local-value 'mode-line-format buf))
+	 (orig-mlf (and (consp mlf) (cddr mlf)))
+	 (var (if reset 'mode-line-format 'ultra-scroll--mode-line)))
+    (setf (buffer-local-value var buf)
+	  (if (and reset orig-mlf) orig-mlf
+	    (format-mode-line orig-mlf nil win buf)))))
+
+(defsubst ultra-scroll--update-mode-line (win)
+  "Update the throttled mode line in window WIN, if needed."
+  (when ultra-scroll-throttle-mode-line
+    (let* ((buf (window-buffer win))
+	   (start-time
+	    (buffer-local-value 'ultra-scroll--mode-line-throttle-time buf))
+	   (cur-tm (current-time)))
+      (unless (or (not start-time)
+		  (time-less-p (time-subtract cur-tm start-time)
+			       (if (floatp 'ultra-scroll-throttle-mode-line)
+				   ultra-scroll-throttle-mode-line
+				 0.25)))
+	(ultra-scroll--update-throttled-mode-line win buf)
+	(setf (buffer-local-value 'ultra-scroll--mode-line-throttle-time buf)
+	      cur-tm)))))
+
+(defun ultra-scroll--end-scroll (win)
+  "Reset GC variable, scroll settings, etc. in window WIN during idle time."
   (when ultra-scroll--gc-percentage-orig
     (setq gc-cons-percentage ultra-scroll--gc-percentage-orig))
   (when (and ultra-scroll--scroll-conservatively-orig
@@ -237,6 +276,11 @@ actions."
   (when (and ultra-scroll--scroll-margin-orig
 	     (> ultra-scroll--scroll-margin-orig 0))
     (setq scroll-margin ultra-scroll--scroll-margin-orig))
+  (when ultra-scroll-throttle-mode-line
+    (ultra-scroll--update-throttled-mode-line win nil 'reset)
+    (setf (buffer-local-value 'ultra-scroll--mode-line-throttle-time
+			      (window-buffer win))
+	  nil))
   (setq ultra-scroll--timer nil))
 
 (defsubst ultra-scroll--prepare-to-scroll (&optional window)
@@ -284,9 +328,23 @@ temporarily."
 	    scroll-margin 0))
     (setq ultra-scroll--timer
 	  (run-with-idle-timer ultra-scroll-idle-time nil
-			       #'ultra-scroll--end-scroll))))
+			       #'ultra-scroll--end-scroll window))
+
+    ;; Throttle the mode line
+    (when ultra-scroll-throttle-mode-line
+      (let* ((buf (window-buffer window))
+	     (mlf (buffer-local-value 'mode-line-format buf)))
+	(setf (buffer-local-value 'ultra-scroll--mode-line-throttle-time buf)
+	      (current-time))
+	(unless (and (consp mlf) (eq (car mlf) 'ultra-scroll--mode-line))
+	  (push '(:eval ultra-scroll--mode-line)
+		(buffer-local-value 'mode-line-format buf))
+	  (push 'ultra-scroll--mode-line
+		(buffer-local-value 'mode-line-format buf))
+	  (ultra-scroll--update-throttled-mode-line window buf))))))
 
 ;;;; Scroll
+
 (defun ultra-scroll-down (delta)
   "Scroll the current window down by DELTA pixels.
 DELTA should not be larger than the height of the current window."
@@ -378,7 +436,7 @@ DELTA should be less than the window's height."
   (let (ignore)
     (unless (or (zerop delta)
 		(and (setq ignore (window-parameter window 'ultra-scroll--ignore))
-		     (or ; ignoring this window moving this direction
+		     (or  ; ignoring this window moving this direction
 		      (and (eq (point) (car ignore))
 			   (eq (cdr ignore) (< delta 0)))
 		      (set-window-parameter window 'ultra-scroll--ignore nil))))
@@ -398,6 +456,7 @@ DELTA should be less than the window's height."
 				   (cons (point) end))
 	     (message (error-message-string
 		       (if end '(end-of-buffer) '(beginning-of-buffer)))))))
+	(ultra-scroll--update-mode-line window)
         (ultra-scroll--leave window)))))
 
 (defun ultra-scroll (event &optional arg)
