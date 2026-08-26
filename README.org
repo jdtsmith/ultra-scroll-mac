@@ -40,7 +40,7 @@ For systems which do /not/ provide normal pixel scroll data, you can try the bui
 #+end_important
 
 #+begin_note
-On Linux, getting proper pixel-level wheel mouse input can be finicky, depending on graphics toolkit and input manager in use.  See [[https://github.com/jdtsmith/ultra-scroll/discussions/52#discussioncomment-18111123][this comment]] for tips.
+On Linux, getting proper pixel-level wheel mouse input can be finicky, depending on graphics toolkit and input manager in use.  For example, some users have reported PGTK builds with GTK3 only provide real pixel deltas for track pads, not wheel mice.  See [[https://github.com/jdtsmith/ultra-scroll/discussions/52#discussioncomment-18111123][this comment]] for tips.
 #+end_note
 
 ** Installation

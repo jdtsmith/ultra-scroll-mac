@@ -79,7 +79,9 @@ interpolation) instead.
 
 > [!NOTE]
 > On Linux, getting proper pixel-level wheel mouse input can be finicky,
-> depending on graphics toolkit and input manager in use. See [this
+> depending on graphics toolkit and input manager in use. For example,
+> some users have reported PGTK builds with GTK3 only provide real pixel
+> deltas for track pads, not wheel mice. See [this
 > comment](https://github.com/jdtsmith/ultra-scroll/discussions/52#discussioncomment-18111123)
 > for tips.
 
