@@ -471,7 +471,7 @@ with various buffer and window sizes[^2].
     time, so that all the other emacs commands that occur when new
     content is brought into view (font-lock) can run without causing
     scroll lag, for all your different modes. **Faster is better**: 3ms
-    or less[^3] in a light buffer would be *ideal*.
+    or less[^2] in a light buffer would be *ideal*.
 4.  Building `--with-native-comp` is *essential* for ultra-smooth
     scrolling. It increases the speed of each individual scroll command
     by **\>3x**, which is important since these commands are called so
@@ -495,14 +495,6 @@ with various buffer and window sizes[^2].
 [^1]: Formerly `ultra-scroll-mac`.
 
 [^2]: To try this yourself, `M-x elp-instrument-function` on both
-    `ultra-scroll-up/down`, scroll around (both directions) in a big
-    buffer with a large window, then `M-x elp-results`. The last column
-    gives average time in seconds. Less than 0.003s (i.e. 3ms) is ideal,
-    8ms is still perfectly usable, 15ms you'll feel a bit, 50ms will be
-    very frustrating. `scroll-down` is always faster than `scroll-up`
-    due to an asymmetry in Emacs' `vscroll` buffer.
-
-[^3]: To try this yourself, `M-x elp-instrument-function` on both
     `ultra-scroll-up/down`, scroll around (both directions) in a big
     buffer with a large window, then `M-x elp-results`. The last column
     gives average time in seconds. Less than 0.003s (i.e. 3ms) is ideal,
